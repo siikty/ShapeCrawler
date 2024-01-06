@@ -9,22 +9,22 @@ namespace ShapeCrawler.Texts;
 
 internal sealed class Field : IParagraphPortion
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly ResetableLazy<ITextPortionFont> font;
     private readonly A.Field aField;
     private readonly PortionText portionText;
     private readonly A.Text? aText;
 
-    internal Field(TypedOpenXmlPart sdkTypedOpenXmlPart, A.Field aField)
+    internal Field(OpenXmlPart sdkOpenXmlPart, A.Field aField)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aText = aField.GetFirstChild<A.Text>();
         this.aField = aField;
 
         this.font = new ResetableLazy<ITextPortionFont>(() =>
         {
-            var textPortionSize = new PortionFontSize(sdkTypedOpenXmlPart, this.aText!);
-            return new TextPortionFont(sdkTypedOpenXmlPart, this.aText!, textPortionSize);
+            var textPortionSize = new PortionFontSize(sdkOpenXmlPart, this.aText!);
+            return new TextPortionFont(sdkOpenXmlPart, this.aText!, textPortionSize);
         });
 
         this.portionText = new PortionText(this.aField);
@@ -100,7 +100,7 @@ internal sealed class Field : IParagraphPortion
             return null;
         }
 
-        var hyperlinkRelationship = (HyperlinkRelationship)this.sdkTypedOpenXmlPart.GetReferenceRelationship(hyperlink.Id!);
+        var hyperlinkRelationship = (HyperlinkRelationship)this.sdkOpenXmlPart.GetReferenceRelationship(hyperlink.Id!);
 
         return hyperlinkRelationship.Uri.ToString();
     }
@@ -121,7 +121,7 @@ internal sealed class Field : IParagraphPortion
         }
 
         var uri = new Uri(url!, UriKind.RelativeOrAbsolute);
-        var addedHyperlinkRelationship = this.sdkTypedOpenXmlPart.AddHyperlinkRelationship(uri, true);
+        var addedHyperlinkRelationship = this.sdkOpenXmlPart.AddHyperlinkRelationship(uri, true);
 
         hyperlink.Id = addedHyperlinkRelationship.Id;
     }

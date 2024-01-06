@@ -8,13 +8,13 @@ namespace ShapeCrawler.Drawing;
 
 internal sealed class ShapeFillImage : IImage
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.Blip aBlip;
     private ImagePart sdkImagePart;
     
-    internal ShapeFillImage(TypedOpenXmlPart sdkTypedOpenXmlPart, A.BlipFill aBlipFill, ImagePart sdkImagePart)
+    internal ShapeFillImage(OpenXmlPart sdkOpenXmlPart, A.BlipFill aBlipFill, ImagePart sdkImagePart)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aBlip = aBlipFill.Blip!;
         this.sdkImagePart = sdkImagePart;
     }
@@ -25,11 +25,11 @@ internal sealed class ShapeFillImage : IImage
 
     public void Update(Stream stream)
     {
-        var isSharedImagePart = this.sdkTypedOpenXmlPart.GetPartsOfType<ImagePart>().Count(x => x == this.sdkImagePart) > 1;
+        var isSharedImagePart = this.sdkOpenXmlPart.GetPartsOfType<ImagePart>().Count(x => x == this.sdkImagePart) > 1;
         if (isSharedImagePart)
         {
             var rId = $"rId-{Guid.NewGuid().ToString("N").Substring(0, 5)}";
-            this.sdkImagePart = this.sdkTypedOpenXmlPart.AddNewPart<ImagePart>("image/png", rId);
+            this.sdkImagePart = this.sdkOpenXmlPart.AddNewPart<ImagePart>("image/png", rId);
             this.aBlip.Embed!.Value = rId;
         }
 

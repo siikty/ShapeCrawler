@@ -9,18 +9,18 @@ namespace ShapeCrawler.Texts;
 
 internal sealed class TextParagraphPortion : IParagraphPortion
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly ResetableLazy<TextPortionFont> font;
     private readonly A.Run aRun;
 
-    internal TextParagraphPortion(TypedOpenXmlPart sdkTypedOpenXmlPart, A.Run aRun)
+    internal TextParagraphPortion(OpenXmlPart sdkOpenXmlPart, A.Run aRun)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.AText = aRun.Text!;
         this.aRun = aRun;
-        var textPortionSize = new PortionFontSize(sdkTypedOpenXmlPart, this.AText);
+        var textPortionSize = new PortionFontSize(sdkOpenXmlPart, this.AText);
         this.font = new ResetableLazy<TextPortionFont>(() =>
-            new TextPortionFont(this.sdkTypedOpenXmlPart, this.AText, textPortionSize));
+            new TextPortionFont(this.sdkOpenXmlPart, this.AText, textPortionSize));
     }
 
     /// <inheritdoc/>
@@ -111,7 +111,7 @@ internal sealed class TextParagraphPortion : IParagraphPortion
             return null;
         }
 
-        var hyperlinkRelationship = (HyperlinkRelationship)this.sdkTypedOpenXmlPart.GetReferenceRelationship(hyperlink.Id!);
+        var hyperlinkRelationship = (HyperlinkRelationship)this.sdkOpenXmlPart.GetReferenceRelationship(hyperlink.Id!);
 
         return hyperlinkRelationship.Uri.ToString();
     }
@@ -132,7 +132,7 @@ internal sealed class TextParagraphPortion : IParagraphPortion
         }
 
         var uri = new Uri(url!, UriKind.RelativeOrAbsolute);
-        var addedHyperlinkRelationship = this.sdkTypedOpenXmlPart.AddHyperlinkRelationship(uri, true);
+        var addedHyperlinkRelationship = this.sdkOpenXmlPart.AddHyperlinkRelationship(uri, true);
 
         hyperlink.Id = addedHyperlinkRelationship.Id;
     }

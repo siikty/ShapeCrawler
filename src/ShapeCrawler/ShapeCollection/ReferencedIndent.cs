@@ -12,18 +12,18 @@ namespace ShapeCrawler.ShapeCollection;
 
 internal readonly record struct ReferencedIndent
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.Text aText;
     private readonly PresentationColor presColor;
 
-    internal ReferencedIndent(TypedOpenXmlPart sdkTypedOpenXmlPart, A.Text aText)
-        : this(sdkTypedOpenXmlPart, aText, new PresentationColor(sdkTypedOpenXmlPart))
+    internal ReferencedIndent(OpenXmlPart sdkOpenXmlPart, A.Text aText)
+        : this(sdkOpenXmlPart, aText, new PresentationColor(sdkOpenXmlPart))
     {
     }
 
-    private ReferencedIndent(TypedOpenXmlPart sdkTypedOpenXmlPart, A.Text aText, PresentationColor presColor)
+    private ReferencedIndent(OpenXmlPart sdkOpenXmlPart, A.Text aText, PresentationColor presColor)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aText = aText;
         this.presColor = presColor;
     }
@@ -35,12 +35,12 @@ internal readonly record struct ReferencedIndent
     /// </summary>
     internal string? ColorHexOrNull()
     {
-        if (this.sdkTypedOpenXmlPart is SlidePart)
+        if (this.sdkOpenXmlPart is SlidePart)
         {
             return this.SlideColorHexOrNull();
         }
 
-        if (this.sdkTypedOpenXmlPart is SlideLayoutPart)
+        if (this.sdkOpenXmlPart is SlideLayoutPart)
         {
             return this.LayoutColorHexOrNull();
         }
@@ -50,7 +50,7 @@ internal readonly record struct ReferencedIndent
 
     internal ColorType? ColorTypeOrNull()
     {
-        if (this.sdkTypedOpenXmlPart is SlidePart)
+        if (this.sdkOpenXmlPart is SlidePart)
         {
             return this.SlideColorTypeOrNull();
         }
@@ -60,7 +60,7 @@ internal readonly record struct ReferencedIndent
 
     internal bool? FontBoldFlagOrNull()
     {
-        if (this.sdkTypedOpenXmlPart is SlidePart)
+        if (this.sdkOpenXmlPart is SlidePart)
         {
             return this.SlideFontBoldFlagOrNull();
         }
@@ -70,7 +70,7 @@ internal readonly record struct ReferencedIndent
 
     internal A.LatinFont? ALatinFontOrNull()
     {
-        if (this.sdkTypedOpenXmlPart is SlidePart sdkSlidePart)
+        if (this.sdkOpenXmlPart is SlidePart sdkSlidePart)
         {
             return this.SlideALatinFontOrNull(sdkSlidePart);
         }
@@ -102,7 +102,7 @@ internal readonly record struct ReferencedIndent
     /// </summary>
     private P.Shape? ReferencedLayoutPShapeOrNullOf(P.Shape sourcePShape)
     {
-        if (this.sdkTypedOpenXmlPart is not SlidePart sdkSlidePart)
+        if (this.sdkOpenXmlPart is not SlidePart sdkSlidePart)
         {
             return null;
         }
@@ -130,11 +130,11 @@ internal readonly record struct ReferencedIndent
             return null;
         }
 
-        var masterPShapes = this.sdkTypedOpenXmlPart switch
+        var masterPShapes = this.sdkOpenXmlPart switch
         {
             SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster.CommonSlideData!
                 .ShapeTree!.Elements<P.Shape>(),
-            _ => ((SlideLayoutPart)this.sdkTypedOpenXmlPart).SlideMasterPart!.SlideMaster.CommonSlideData!
+            _ => ((SlideLayoutPart)this.sdkOpenXmlPart).SlideMasterPart!.SlideMaster.CommonSlideData!
                 .ShapeTree!.Elements<P.Shape>()
         };
 
@@ -272,11 +272,11 @@ internal readonly record struct ReferencedIndent
 
         if (pPlaceholderShape.Type?.Value == P.PlaceholderValues.Title)
         {
-            var pTitleStyle = this.sdkTypedOpenXmlPart switch
+            var pTitleStyle = this.sdkOpenXmlPart switch
             {
                 SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster.TextStyles!
                     .TitleStyle!,
-                _ => ((SlideLayoutPart)this.sdkTypedOpenXmlPart).SlideMasterPart!.SlideMaster.TextStyles!
+                _ => ((SlideLayoutPart)this.sdkOpenXmlPart).SlideMasterPart!.SlideMaster.TextStyles!
                     .TitleStyle!
             };
             var masterTitleFonts = new IndentFonts(pTitleStyle);
@@ -288,11 +288,11 @@ internal readonly record struct ReferencedIndent
         }
         else if (pPlaceholderShape.Type?.Value == P.PlaceholderValues.Body)
         {
-            var pBodyStyle = this.sdkTypedOpenXmlPart switch
+            var pBodyStyle = this.sdkOpenXmlPart switch
             {
                 SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster.TextStyles!
                     .BodyStyle!,
-                _ => ((SlideLayoutPart)this.sdkTypedOpenXmlPart).SlideMasterPart!.SlideMaster.TextStyles!.BodyStyle!
+                _ => ((SlideLayoutPart)this.sdkOpenXmlPart).SlideMasterPart!.SlideMaster.TextStyles!.BodyStyle!
             };
             var masterBodyFonts = new IndentFonts(pBodyStyle);
             var masterBodyFont = masterBodyFonts.FontOrNull(indentLevel);
@@ -357,11 +357,11 @@ internal readonly record struct ReferencedIndent
 
         if (pPlaceholderShape.Type?.Value == P.PlaceholderValues.Title)
         {
-            var pTitleStyle = this.sdkTypedOpenXmlPart switch
+            var pTitleStyle = this.sdkOpenXmlPart switch
             {
                 SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster.TextStyles!
                     .TitleStyle!,
-                _ => ((SlideLayoutPart)this.sdkTypedOpenXmlPart).SlideMasterPart!.SlideMaster.TextStyles!
+                _ => ((SlideLayoutPart)this.sdkOpenXmlPart).SlideMasterPart!.SlideMaster.TextStyles!
                     .TitleStyle!
             };
             var masterTitleFonts = new IndentFonts(pTitleStyle);
@@ -373,11 +373,11 @@ internal readonly record struct ReferencedIndent
         }
         else if (pPlaceholderShape.Type?.Value == P.PlaceholderValues.Body)
         {
-            var pBodyStyle = this.sdkTypedOpenXmlPart switch
+            var pBodyStyle = this.sdkOpenXmlPart switch
             {
                 SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster.TextStyles!
                     .BodyStyle!,
-                _ => ((SlideLayoutPart)this.sdkTypedOpenXmlPart).SlideMasterPart!.SlideMaster.TextStyles!.BodyStyle!
+                _ => ((SlideLayoutPart)this.sdkOpenXmlPart).SlideMasterPart!.SlideMaster.TextStyles!.BodyStyle!
             };
             var masterBodyFonts = new IndentFonts(pBodyStyle);
             var masterBodyFont = masterBodyFonts.FontOrNull(indentLevel);
@@ -516,7 +516,7 @@ internal readonly record struct ReferencedIndent
                 }    
             }
 
-            var sdkSlidePart = (SlidePart)this.sdkTypedOpenXmlPart;
+            var sdkSlidePart = (SlidePart)this.sdkOpenXmlPart;
             var bodyStyleFonts = new IndentFonts(sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster.TextStyles!.BodyStyle!);
             var bodyStyleFont = bodyStyleFonts.FontOrNull(indentLevel);
             if (bodyStyleFont.HasValue)

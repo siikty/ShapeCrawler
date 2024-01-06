@@ -21,8 +21,8 @@ internal sealed class MasterSlideNumber : IMasterSlideNumber
 {
     private readonly Position position;
 
-    internal MasterSlideNumber(TypedOpenXmlPart sdkTypedOpenXmlPart, P.Shape sdkPShape)
-        : this(sdkPShape, new Position(sdkTypedOpenXmlPart, sdkPShape))
+    internal MasterSlideNumber(OpenXmlPart sdkOpenXmlPart, P.Shape sdkPShape)
+        : this(sdkPShape, new Position(sdkOpenXmlPart, sdkPShape))
     {
     }
 

@@ -36,12 +36,12 @@ public interface ITableRow
 
 internal sealed class TableRow : ITableRow
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly int index;
 
-    internal TableRow(TypedOpenXmlPart sdkTypedOpenXmlPart, A.TableRow aTableRow, int index)
+    internal TableRow(OpenXmlPart sdkOpenXmlPart, A.TableRow aTableRow, int index)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.ATableRow = aTableRow;
         this.index = index;
     }
@@ -65,7 +65,7 @@ internal sealed class TableRow : ITableRow
                 else if (aTc.VerticalMerge is not null)
                 {
                     var pGraphicFrame = this.ATableRow.Ancestors<P.GraphicFrame>().First();
-                    var table = new Table(this.sdkTypedOpenXmlPart, pGraphicFrame);
+                    var table = new Table(this.sdkOpenXmlPart, pGraphicFrame);
                     var upRowIdx = this.index - 1;
                     var upNeighborCell = (TableCell)table[upRowIdx, columnIdx];
                     cells.Add(upNeighborCell);
@@ -73,7 +73,7 @@ internal sealed class TableRow : ITableRow
                 }
                 else
                 {
-                    addedCell = new TableCell(this.sdkTypedOpenXmlPart, aTc, this.index, columnIdx);
+                    addedCell = new TableCell(this.sdkOpenXmlPart, aTc, this.index, columnIdx);
                     cells.Add(addedCell);
                 }
 
@@ -120,7 +120,7 @@ internal sealed class TableRow : ITableRow
         this.ATableRow.Height!.Value = newEmu;
 
         var pGraphicalFrame = this.ATableRow.Ancestors<P.GraphicFrame>().First();
-        var parentTable = new Table(this.sdkTypedOpenXmlPart, pGraphicalFrame);
+        var parentTable = new Table(this.sdkOpenXmlPart, pGraphicalFrame);
         if (newPoints > currentPoints)
         {
             var diffPoints = newPoints - currentPoints;

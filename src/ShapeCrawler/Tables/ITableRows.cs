@@ -43,12 +43,12 @@ public interface ITableRows : IEnumerable<ITableRow>
 
 internal sealed class TableRows : ITableRows
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.Table aTable;
 
-    internal TableRows(TypedOpenXmlPart sdkTypedOpenXmlPart, P.GraphicFrame pGraphicFrame)
+    internal TableRows(OpenXmlPart sdkOpenXmlPart, P.GraphicFrame pGraphicFrame)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aTable = pGraphicFrame.GetFirstChild<A.Graphic>() !.GraphicData!.GetFirstChild<A.Table>() !;
     }
 
@@ -85,5 +85,5 @@ internal sealed class TableRows : ITableRows
     IEnumerator IEnumerable.GetEnumerator() => this.Rows().GetEnumerator();
 
     private List<TableRow> Rows() => this.aTable.Elements<A.TableRow>()
-        .Select((aTableRow, index) => new TableRow(this.sdkTypedOpenXmlPart, aTableRow, index)).ToList();
+        .Select((aTableRow, index) => new TableRow(this.sdkOpenXmlPart, aTableRow, index)).ToList();
 }

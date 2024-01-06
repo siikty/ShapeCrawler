@@ -19,22 +19,22 @@ internal sealed class Picture : CopyableShape, IPicture
     private readonly A.Blip aBlip;
 
     internal Picture(
-        TypedOpenXmlPart sdkTypedOpenXmlPart,
+        OpenXmlPart sdkOpenXmlPart,
         P.Picture pPicture,
         A.Blip aBlip)
-        : this(sdkTypedOpenXmlPart, pPicture, aBlip, new SlidePictureImage(sdkTypedOpenXmlPart, aBlip))
+        : this(sdkOpenXmlPart, pPicture, aBlip, new SlidePictureImage(sdkOpenXmlPart, aBlip))
     {
     }
 
-    private Picture(TypedOpenXmlPart sdkTypedOpenXmlPart, P.Picture pPicture, A.Blip aBlip, IImage image)
-        : base(sdkTypedOpenXmlPart, pPicture)
+    private Picture(OpenXmlPart sdkOpenXmlPart, P.Picture pPicture, A.Blip aBlip, IImage image)
+        : base(sdkOpenXmlPart, pPicture)
     {
         this.pPicture = pPicture;
         this.aBlip = aBlip;
         this.Image = image;
         this.blipEmbed = aBlip.Embed!;
-        this.Outline = new SlideShapeOutline(sdkTypedOpenXmlPart, pPicture.ShapeProperties!);
-        this.Fill = new ShapeFill(sdkTypedOpenXmlPart, pPicture.ShapeProperties!);
+        this.Outline = new SlideShapeOutline(sdkOpenXmlPart, pPicture.ShapeProperties!);
+        this.Fill = new ShapeFill(sdkOpenXmlPart, pPicture.ShapeProperties!);
     }
 
     public IImage Image { get; }
@@ -65,14 +65,14 @@ internal sealed class Picture : CopyableShape, IPicture
         base.CopyTo(id, pShapeTree, existingShapeNames);
 
         // COPY PARTS
-        var sourceSdkSlidePart = this.sdkTypedOpenXmlPart;
+        var sourceSdkSlidePart = this.sdkOpenXmlPart;
         var sourceImagePart = (ImagePart)sourceSdkSlidePart.GetPartById(this.blipEmbed.Value!);
 
         // Creates a new part in this slide with a new Id...
-        var targetImagePartRId = this.sdkTypedOpenXmlPart.NextRelationshipId();
+        var targetImagePartRId = this.sdkOpenXmlPart.NextRelationshipId();
 
         // Adds to current slide parts and update relation id.
-        var targetImagePart = this.sdkTypedOpenXmlPart.AddNewPart<ImagePart>(sourceImagePart.ContentType, targetImagePartRId);
+        var targetImagePart = this.sdkOpenXmlPart.AddNewPart<ImagePart>(sourceImagePart.ContentType, targetImagePartRId);
         using var sourceImageStream = sourceImagePart.GetStream(FileMode.Open);
         sourceImageStream.Position = 0;
         targetImagePart.FeedData(sourceImageStream);
@@ -92,7 +92,7 @@ internal sealed class Picture : CopyableShape, IPicture
 
         var svgId = svgBlipList.First().Embed!.Value!;
 
-        var imagePart = (ImagePart)this.sdkTypedOpenXmlPart.GetPartById(svgId);
+        var imagePart = (ImagePart)this.sdkOpenXmlPart.GetPartById(svgId);
         using var svgStream = imagePart.GetStream(FileMode.Open, FileAccess.Read);
         using var sReader = new StreamReader(svgStream);
 

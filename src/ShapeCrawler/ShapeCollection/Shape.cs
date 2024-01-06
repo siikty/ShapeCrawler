@@ -15,19 +15,19 @@ namespace ShapeCrawler.ShapeCollection;
 
 internal abstract class Shape : IShape
 {
-    protected readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    protected readonly OpenXmlPart sdkOpenXmlPart;
     protected readonly OpenXmlElement pShapeTreeElement;
     private const string customDataElementName = "ctd";
     private readonly Position position;
     private readonly ShapeSize size;
     private readonly ShapeId shapeId;
 
-    internal Shape(TypedOpenXmlPart sdkTypedOpenXmlPart, OpenXmlElement pShapeTreeElement)
+    internal Shape(OpenXmlPart sdkOpenXmlPart, OpenXmlElement pShapeTreeElement)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.pShapeTreeElement = pShapeTreeElement;
-        this.position = new Position(sdkTypedOpenXmlPart, pShapeTreeElement);
-        this.size = new ShapeSize(this.sdkTypedOpenXmlPart, pShapeTreeElement);
+        this.position = new Position(sdkOpenXmlPart, pShapeTreeElement);
+        this.size = new ShapeSize(this.sdkOpenXmlPart, pShapeTreeElement);
         this.shapeId = new ShapeId(pShapeTreeElement);
     }
 
@@ -128,7 +128,7 @@ internal abstract class Shape : IShape
 #if NETSTANDARD2_0
             var regex = new Regex(pattern, RegexOptions.None, TimeSpan.FromSeconds(100));
 #else
-            var regex = new Regex(pattern, RegexOptions.NonBacktracking);
+            var regex = new Regex(pattern, RegexOptions.None, TimeSpan.FromSeconds(100));
 #endif
 
             var elementText = regex.Match(this.pShapeTreeElement.InnerXml).Groups[1];
@@ -173,7 +173,7 @@ internal abstract class Shape : IShape
             var aTransform2D = pSpPr.Transform2D;
             if (aTransform2D == null)
             {
-                aTransform2D = new ReferencedPShape(this.sdkTypedOpenXmlPart, this.pShapeTreeElement).ATransform2D();
+                aTransform2D = new ReferencedPShape(this.sdkOpenXmlPart, this.pShapeTreeElement).ATransform2D();
                 var angle2 = aTransform2D.Rotation!.Value; // rotation angle in 1/60,000th of a degree
                 return angle2 / 60000d;
             }

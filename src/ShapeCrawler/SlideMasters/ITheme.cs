@@ -24,16 +24,16 @@ public interface ITheme
 
 internal sealed class Theme : ITheme
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.Theme aTheme;
 
-    internal Theme(TypedOpenXmlPart sdkTypedOpenXmlPart, A.Theme aTheme)
+    internal Theme(OpenXmlPart sdkOpenXmlPart, A.Theme aTheme)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aTheme = aTheme;
     }
 
-    public IThemeFontScheme FontScheme => new ThemeFontScheme(this.sdkTypedOpenXmlPart);
+    public IThemeFontScheme FontScheme => new ThemeFontScheme(this.sdkOpenXmlPart);
 
     public IThemeColorScheme ColorScheme => this.GetColorScheme();
 

@@ -10,27 +10,27 @@ namespace ShapeCrawler.Drawing;
 
 internal record ShapeFill : IShapeFill
 {
-    private readonly TypedOpenXmlCompositeElement sdkTypedOpenXmlCompositeElement;
+    private readonly OpenXmlCompositeElement sdkOpenXmlCompositeElement;
     private SlidePictureImage? pictureImage;
     private A.SolidFill? aSolidFill;
     private A.GradientFill? aGradFill;
     private A.PatternFill? aPattFill;
     private A.BlipFill? aBlipFill;
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
 
     internal ShapeFill(
-        TypedOpenXmlPart sdkTypedOpenXmlPart, 
-        TypedOpenXmlCompositeElement sdkTypedOpenXmlCompositeElement)
+        OpenXmlPart sdkOpenXmlPart, 
+        OpenXmlCompositeElement sdkOpenXmlCompositeElement)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
-        this.sdkTypedOpenXmlCompositeElement = sdkTypedOpenXmlCompositeElement;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
+        this.sdkOpenXmlCompositeElement = sdkOpenXmlCompositeElement;
     }
 
     public string? Color
     {
         get
         {
-            this.aSolidFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
+            this.aSolidFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
             if (this.aSolidFill != null)
             {
                 var aRgbColorModelHex = this.aSolidFill.RgbColorModelHex;
@@ -48,13 +48,13 @@ internal record ShapeFill : IShapeFill
 
     private string? ColorHexOrNullOf(string schemeColor)
     {
-        var aColorScheme = this.sdkTypedOpenXmlPart switch
+        var aColorScheme = this.sdkOpenXmlPart switch
         {
             SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.ThemePart!.Theme.ThemeElements!
                 .ColorScheme!,
             SlideLayoutPart sdkSlideLayoutPart => sdkSlideLayoutPart.SlideMasterPart!.ThemePart!.Theme.ThemeElements!
                 .ColorScheme!,
-            _ => ((SlideMasterPart)this.sdkTypedOpenXmlPart).ThemePart!.Theme.ThemeElements!.ColorScheme!
+            _ => ((SlideMasterPart)this.sdkOpenXmlPart).ThemePart!.Theme.ThemeElements!.ColorScheme!
         };
 
         var aColor2Type = aColorScheme.Elements<A.Color2Type>().FirstOrDefault(c => c.LocalName == schemeColor);
@@ -73,7 +73,7 @@ internal record ShapeFill : IShapeFill
         get
         {
             const int defaultAlphaPercentages = 100;
-            this.aSolidFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
+            this.aSolidFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
             if (this.aSolidFill != null)
             {
                 var aRgbColorModelHex = this.aSolidFill.RgbColorModelHex;
@@ -97,7 +97,7 @@ internal record ShapeFill : IShapeFill
         get
         {
             const double luminanceModulation = 100;
-            this.aSolidFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
+            this.aSolidFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
             if (this.aSolidFill != null)
             {
                 var aRgbColorModelHex = this.aSolidFill.RgbColorModelHex;
@@ -120,7 +120,7 @@ internal record ShapeFill : IShapeFill
         get
         {
             const double defaultValue = 0;
-            this.aSolidFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
+            this.aSolidFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
             if (this.aSolidFill != null)
             {
                 var aRgbColorModelHex = this.aSolidFill.RgbColorModelHex;
@@ -144,7 +144,7 @@ internal record ShapeFill : IShapeFill
     {
         get
         {
-            this.aSolidFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
+            this.aSolidFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
             if (this.aSolidFill != null)
             {
                 return FillType.Solid;
@@ -155,20 +155,20 @@ internal record ShapeFill : IShapeFill
                 return FillType.Gradient;
             }
 
-            this.aBlipFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.BlipFill>();
+            this.aBlipFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.BlipFill>();
 
             if (this.aBlipFill is not null)
             {
                 return FillType.Picture;
             }
 
-            this.aPattFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.PatternFill>();
+            this.aPattFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.PatternFill>();
             if (this.aPattFill != null)
             {
                 return FillType.Pattern;
             }
 
-            if (this.sdkTypedOpenXmlCompositeElement.Ancestors<P.Shape>().First().UseBackgroundFill is not null)
+            if (this.sdkOpenXmlCompositeElement.Ancestors<P.Shape>().First().UseBackgroundFill is not null)
             {
                 return FillType.SlideBackground;
             }
@@ -187,7 +187,7 @@ internal record ShapeFill : IShapeFill
         }
         else
         {
-            var rId = this.sdkTypedOpenXmlPart.AddImagePart(image);
+            var rId = this.sdkOpenXmlPart.AddImagePart(image);
 
             var aBlipFill = new A.BlipFill();
             var aStretch = new A.Stretch();
@@ -195,7 +195,7 @@ internal record ShapeFill : IShapeFill
             aBlipFill.Append(new A.Blip { Embed = rId });
             aBlipFill.Append(aStretch);
 
-            this.sdkTypedOpenXmlCompositeElement.Append(aBlipFill);
+            this.sdkOpenXmlCompositeElement.Append(aBlipFill);
 
             this.aSolidFill?.Remove();
             this.aBlipFill = null;
@@ -209,7 +209,7 @@ internal record ShapeFill : IShapeFill
     public void SetColor(string hex)
     {
         this.Initialize();
-        this.sdkTypedOpenXmlCompositeElement.AddASolidFill(hex);
+        this.sdkOpenXmlCompositeElement.AddASolidFill(hex);
     }
 
     private void InitSlideBackgroundFillOr()
@@ -223,7 +223,7 @@ internal record ShapeFill : IShapeFill
 
     private void InitSolidFillOr()
     {
-        this.aSolidFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
+        this.aSolidFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.SolidFill>();
         if (this.aSolidFill != null)
         {
             var aRgbColorModelHex = this.aSolidFill.RgbColorModelHex;
@@ -239,7 +239,7 @@ internal record ShapeFill : IShapeFill
         }
         else
         {
-            this.aGradFill = this.sdkTypedOpenXmlCompositeElement!.GetFirstChild<A.GradientFill>();
+            this.aGradFill = this.sdkOpenXmlCompositeElement!.GetFirstChild<A.GradientFill>();
             if (this.aGradFill != null)
             {
             }
@@ -252,7 +252,7 @@ internal record ShapeFill : IShapeFill
 
     private void InitGradientFillOr()
     {
-        this.aGradFill = this.sdkTypedOpenXmlCompositeElement!.GetFirstChild<A.GradientFill>();
+        this.aGradFill = this.sdkOpenXmlCompositeElement!.GetFirstChild<A.GradientFill>();
         if (this.aGradFill != null)
         {
         }
@@ -264,11 +264,11 @@ internal record ShapeFill : IShapeFill
 
     private void InitPictureFillOr()
     {
-        this.aBlipFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.BlipFill>();
+        this.aBlipFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.BlipFill>();
 
         if (this.aBlipFill is not null)
         {
-            var image = new SlidePictureImage(this.sdkTypedOpenXmlPart, this.aBlipFill.Blip!);
+            var image = new SlidePictureImage(this.sdkOpenXmlPart, this.aBlipFill.Blip!);
             this.pictureImage = image;
         }
         else
@@ -279,7 +279,7 @@ internal record ShapeFill : IShapeFill
 
     private void InitPatternFillOr()
     {
-        this.aPattFill = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.PatternFill>();
+        this.aPattFill = this.sdkOpenXmlCompositeElement.GetFirstChild<A.PatternFill>();
         if (this.aPattFill != null)
         {
         }

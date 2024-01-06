@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DocumentFormat.OpenXml.Packaging;
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace ShapeCrawler;
@@ -57,4 +58,6 @@ public interface IChart : IShape
     ///     Gets byte array of excel book containing chart data source.
     /// </summary>
     byte[] BookByteArray();
+
+    ChartPart GetChartPart();
 }

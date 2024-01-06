@@ -1,4 +1,6 @@
-﻿namespace ShapeCrawler;
+﻿using DocumentFormat.OpenXml.Packaging;
+
+namespace ShapeCrawler;
 
 /// <summary>
 ///     Represents a presentation properties.
@@ -35,6 +37,8 @@ public interface IPresentationProperties
     /// </summary>
     IFooter Footer { get; }
 
+    PresentationDocument Document { get; }
+
     /// <summary>
     ///     Saves presentation.
     /// </summary>
@@ -44,4 +48,5 @@ public interface IPresentationProperties
     ///     Gets a presentation byte array.
     /// </summary>
     byte[] AsByteArray();
+
 }

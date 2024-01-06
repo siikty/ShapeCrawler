@@ -12,12 +12,12 @@ namespace ShapeCrawler.Fonts;
 
 internal class PortionFontSize : IFontSize
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.Text aText;
 
-    internal PortionFontSize(TypedOpenXmlPart sdkTypedOpenXmlPart, A.Text aText)
+    internal PortionFontSize(OpenXmlPart sdkOpenXmlPart, A.Text aText)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aText = aText;
     }
 
@@ -30,7 +30,7 @@ internal class PortionFontSize : IFontSize
             return fontSize.Value / 100;
         }
  
-        var size = new ReferencedIndent(this.sdkTypedOpenXmlPart, this.aText).FontSizeOrNull();
+        var size = new ReferencedIndent(this.sdkOpenXmlPart, this.aText).FontSizeOrNull();
         if (size != null)
         {
             return size.Value / 100;
@@ -38,20 +38,20 @@ internal class PortionFontSize : IFontSize
 
         var indentLevel = new AParagraphWrap(this.aText.Ancestors<A.Paragraph>().First()).IndentLevel();
         SlideMasterPart sdkSlideMasterPart;
-        if (this.sdkTypedOpenXmlPart is SlideMasterPart)
+        if (this.sdkOpenXmlPart is SlideMasterPart)
         {
-            sdkSlideMasterPart = (SlideMasterPart)this.sdkTypedOpenXmlPart;
+            sdkSlideMasterPart = (SlideMasterPart)this.sdkOpenXmlPart;
         }
         else
         {
-            sdkSlideMasterPart = ((SlidePart)this.sdkTypedOpenXmlPart).SlideLayoutPart!.SlideMasterPart!;
+            sdkSlideMasterPart = ((SlidePart)this.sdkOpenXmlPart).SlideLayoutPart!.SlideMasterPart!;
         }
 
         AutoShape? parentAutoShape = null;
         var parentPShape = this.aText.Ancestors<P.Shape>().FirstOrDefault();
         if(parentPShape is not null)
         {
-            parentAutoShape = new AutoShape(this.sdkTypedOpenXmlPart, this.aText.Ancestors<P.Shape>().First());
+            parentAutoShape = new AutoShape(this.sdkOpenXmlPart, this.aText.Ancestors<P.Shape>().First());
         }
         
         if (parentAutoShape is not null && parentAutoShape.IsPlaceholder)
@@ -73,7 +73,7 @@ internal class PortionFontSize : IFontSize
         }
         
         // Presentation
-        var pPresentation = ((PresentationDocument)this.sdkTypedOpenXmlPart.OpenXmlPackage).PresentationPart!.Presentation;
+        var pPresentation = ((PresentationDocument)this.sdkOpenXmlPart.OpenXmlPackage).PresentationPart!.Presentation;
         if (pPresentation.DefaultTextStyle != null)
         {
             var defaultTextStyleFonts = new IndentFonts(pPresentation.DefaultTextStyle);

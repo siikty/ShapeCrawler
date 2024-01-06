@@ -16,23 +16,23 @@ internal sealed class AutoShape : CopyableShape
     private readonly P.Shape pShape;
 
     internal AutoShape(
-        TypedOpenXmlPart sdkTypedOpenXmlPart,
+        OpenXmlPart sdkOpenXmlPart,
         P.Shape pShape,
         TextFrame textFrame)
-        : this(sdkTypedOpenXmlPart, pShape)
+        : this(sdkOpenXmlPart, pShape)
     {
         this.IsTextHolder = true;
         this.TextFrame = textFrame;
     }
 
     internal AutoShape(
-        TypedOpenXmlPart sdkTypedOpenXmlPart,
+        OpenXmlPart sdkOpenXmlPart,
         P.Shape pShape)
-        : base(sdkTypedOpenXmlPart, pShape)
+        : base(sdkOpenXmlPart, pShape)
     {
         this.pShape = pShape;
-        this.Outline = new SlideShapeOutline(this.sdkTypedOpenXmlPart, pShape.Descendants<P.ShapeProperties>().First());
-        this.Fill = new ShapeFill(this.sdkTypedOpenXmlPart, pShape.Descendants<P.ShapeProperties>().First());
+        this.Outline = new SlideShapeOutline(this.sdkOpenXmlPart, pShape.Descendants<P.ShapeProperties>().First());
+        this.Fill = new ShapeFill(this.sdkOpenXmlPart, pShape.Descendants<P.ShapeProperties>().First());
     }
 
     public override bool HasOutline => true;

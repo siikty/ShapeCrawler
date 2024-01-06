@@ -8,18 +8,18 @@ namespace ShapeCrawler.Colors;
 
 internal sealed class PresentationColor
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
 
-    internal PresentationColor(TypedOpenXmlPart sdkTypedOpenXmlPart)
+    internal PresentationColor(OpenXmlPart sdkOpenXmlPart)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
     }
 
     #region APIs
 
     internal IndentFont? PresentationFontOrThemeFontOrNull(int indentLevel)
     {
-        var sdkPresDoc = (PresentationDocument)this.sdkTypedOpenXmlPart.OpenXmlPackage;
+        var sdkPresDoc = (PresentationDocument)this.sdkOpenXmlPart.OpenXmlPackage;
         var pDefaultTextStyle = sdkPresDoc.PresentationPart!.Presentation.DefaultTextStyle;
         if (pDefaultTextStyle != null)
         {
@@ -39,7 +39,7 @@ internal sealed class PresentationColor
 
     internal string ThemeColorHex(A.SchemeColorValues aSchemeColorValue)
     {
-        var aColorScheme = this.GetColorScheme(this.sdkTypedOpenXmlPart);
+        var aColorScheme = this.GetColorScheme(this.sdkOpenXmlPart);
         return this.GetColorValue(aColorScheme, aSchemeColorValue);
     }
     
@@ -52,33 +52,85 @@ internal sealed class PresentationColor
     
     private string GetColorValue(A.ColorScheme aColorScheme, A.SchemeColorValues aSchemeColorValue)
     {
-        return aSchemeColorValue switch
+        if (aSchemeColorValue == A.SchemeColorValues.Dark1)
         {
-            A.SchemeColorValues.Dark1 => this.GetRgbOrSystemColor(aColorScheme.Dark1Color!),
-            A.SchemeColorValues.Light1 => this.GetRgbOrSystemColor(aColorScheme.Light1Color!),
-            A.SchemeColorValues.Dark2 => this.GetRgbOrSystemColor(aColorScheme.Dark2Color!),
-            A.SchemeColorValues.Light2 => this.GetRgbOrSystemColor(aColorScheme.Light2Color!),
-            A.SchemeColorValues.Accent1 => this.GetRgbOrSystemColor(aColorScheme.Accent1Color!),
-            A.SchemeColorValues.Accent2 => this.GetRgbOrSystemColor(aColorScheme.Accent2Color!),
-            A.SchemeColorValues.Accent3 => this.GetRgbOrSystemColor(aColorScheme.Accent3Color!),
-            A.SchemeColorValues.Accent4 => this.GetRgbOrSystemColor(aColorScheme.Accent4Color!),
-            A.SchemeColorValues.Accent5 => this.GetRgbOrSystemColor(aColorScheme.Accent5Color!),
-            A.SchemeColorValues.Accent6 => this.GetRgbOrSystemColor(aColorScheme.Accent6Color!),
-            A.SchemeColorValues.Hyperlink => this.GetRgbOrSystemColor(aColorScheme.Hyperlink!),
-            A.SchemeColorValues.FollowedHyperlink => this.GetRgbOrSystemColor(aColorScheme.FollowedHyperlinkColor!),
-            _ => this.GetThemeMappedColor(aSchemeColorValue)
-        };
+            return this.GetRgbOrSystemColor(aColorScheme.Dark1Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Light1)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Light1Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Dark2)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Dark2Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Light2)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Light2Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Accent1)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Accent1Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Accent2)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Accent2Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Accent3)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Accent3Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Accent4)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Accent4Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Accent5)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Accent5Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Accent6)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Accent6Color!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.Hyperlink)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.Hyperlink!);
+        }
+        else if (aSchemeColorValue == A.SchemeColorValues.FollowedHyperlink)
+        {
+            return this.GetRgbOrSystemColor(aColorScheme.FollowedHyperlinkColor!);
+        }
+        else
+        {
+            return this.GetThemeMappedColor(aSchemeColorValue);
+        }
+        //return aSchemeColorValue switch
+        //{
+        //    A.SchemeColorValues.Dark1 => this.GetRgbOrSystemColor(aColorScheme.Dark1Color!),
+        //    A.SchemeColorValues.Light1 => this.GetRgbOrSystemColor(aColorScheme.Light1Color!),
+        //    A.SchemeColorValues.Dark2 => this.GetRgbOrSystemColor(aColorScheme.Dark2Color!),
+        //    A.SchemeColorValues.Light2 => this.GetRgbOrSystemColor(aColorScheme.Light2Color!),
+        //    A.SchemeColorValues.Accent1 => this.GetRgbOrSystemColor(aColorScheme.Accent1Color!),
+        //    A.SchemeColorValues.Accent2 => this.GetRgbOrSystemColor(aColorScheme.Accent2Color!),
+        //    A.SchemeColorValues.Accent3 => this.GetRgbOrSystemColor(aColorScheme.Accent3Color!),
+        //    A.SchemeColorValues.Accent4 => this.GetRgbOrSystemColor(aColorScheme.Accent4Color!),
+        //    A.SchemeColorValues.Accent5 => this.GetRgbOrSystemColor(aColorScheme.Accent5Color!),
+        //    A.SchemeColorValues.Accent6 => this.GetRgbOrSystemColor(aColorScheme.Accent6Color!),
+        //    A.SchemeColorValues.Hyperlink => this.GetRgbOrSystemColor(aColorScheme.Hyperlink!),
+        //    A.SchemeColorValues.FollowedHyperlink => this.GetRgbOrSystemColor(aColorScheme.FollowedHyperlinkColor!),
+        //    _ => this.GetThemeMappedColor(aSchemeColorValue)
+        //};
     }
     
-    private A.ColorScheme GetColorScheme(OpenXmlPart sdkTypedOpenXmlPart)
+    private A.ColorScheme GetColorScheme(OpenXmlPart sdkOpenXmlPart)
     {
-        return sdkTypedOpenXmlPart switch
+        return sdkOpenXmlPart switch
         {
             SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.ThemePart!.Theme.ThemeElements!
                 .ColorScheme!,
             SlideLayoutPart sdkSlideLayoutPart => sdkSlideLayoutPart.SlideMasterPart!.ThemePart!.Theme.ThemeElements!
                 .ColorScheme!,
-            _ => ((SlideMasterPart)sdkTypedOpenXmlPart).ThemePart!.Theme.ThemeElements!.ColorScheme!
+            _ => ((SlideMasterPart)sdkOpenXmlPart).ThemePart!.Theme.ThemeElements!.ColorScheme!
         };
     }
     
@@ -86,11 +138,11 @@ internal sealed class PresentationColor
 
     private string GetThemeMappedColor(A.SchemeColorValues themeColor)
     {
-        var pColorMap = this.sdkTypedOpenXmlPart switch
+        var pColorMap = this.sdkOpenXmlPart switch
         {
             SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster.ColorMap!,
             SlideLayoutPart sdkSlideLayoutPart => sdkSlideLayoutPart.SlideMasterPart!.SlideMaster.ColorMap!,
-            _ => ((SlideMasterPart)this.sdkTypedOpenXmlPart).SlideMaster.ColorMap!
+            _ => ((SlideMasterPart)this.sdkOpenXmlPart).SlideMaster.ColorMap!
         };
         if (themeColor == A.SchemeColorValues.Text1)
         {
@@ -112,7 +164,7 @@ internal sealed class PresentationColor
 
     private string GetThemeColorByString(string fontSchemeColor)
     {
-        var aColorScheme = this.GetColorScheme(this.sdkTypedOpenXmlPart);
+        var aColorScheme = this.GetColorScheme(this.sdkOpenXmlPart);
         return this.GetColorFromScheme(aColorScheme, fontSchemeColor);
     }
     

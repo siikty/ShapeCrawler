@@ -14,12 +14,12 @@ namespace ShapeCrawler;
 
 internal sealed class FontColor : IFontColor
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.Text aText;
 
-    internal FontColor(TypedOpenXmlPart sdkTypedOpenXmlPart, A.Text aText)
+    internal FontColor(OpenXmlPart sdkOpenXmlPart, A.Text aText)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aText = aText;
     }
 
@@ -32,11 +32,11 @@ internal sealed class FontColor : IFontColor
             var aSolidFill = this.aText.Parent!.GetFirstChild<A.RunProperties>()?.SDKASolidFill();
             if (aSolidFill != null)
             {
-                var pSlideMaster = this.sdkTypedOpenXmlPart switch
+                var pSlideMaster = this.sdkOpenXmlPart switch
                 {
                     SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster,
                     SlideLayoutPart sdkSlideLayoutPart => sdkSlideLayoutPart.SlideMasterPart!.SlideMaster,
-                    _ => ((SlideMasterPart)this.sdkTypedOpenXmlPart).SlideMaster
+                    _ => ((SlideMasterPart)this.sdkOpenXmlPart).SlideMaster
                 };
                 var typeAndColor = HexParser.FromSolidFill(aSolidFill, pSlideMaster);
                 return typeAndColor.Item1;
@@ -57,7 +57,7 @@ internal sealed class FontColor : IFontColor
             }
 
             // From Shape
-            var shapeColor = new ShapeColor(this.sdkTypedOpenXmlPart, this.aText);
+            var shapeColor = new ShapeColor(this.sdkOpenXmlPart, this.aText);
             var type = shapeColor.TypeOrNull();
             if (type.HasValue)
             {
@@ -65,9 +65,9 @@ internal sealed class FontColor : IFontColor
             }
 
             // From Referenced Shape
-            if (this.sdkTypedOpenXmlPart is not SlideMasterPart)
+            if (this.sdkOpenXmlPart is not SlideMasterPart)
             {
-                var refShapeColorType = new ReferencedIndent(this.sdkTypedOpenXmlPart, this.aText).ColorTypeOrNull();
+                var refShapeColorType = new ReferencedIndent(this.sdkOpenXmlPart, this.aText).ColorTypeOrNull();
                 if (refShapeColorType.HasValue)
                 {
                     return (ColorType)refShapeColorType;
@@ -82,11 +82,11 @@ internal sealed class FontColor : IFontColor
     {
         get
         {
-            var pSlideMaster = this.sdkTypedOpenXmlPart switch
+            var pSlideMaster = this.sdkOpenXmlPart switch
             {
                 SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster,
                 SlideLayoutPart sdkSlideLayoutPart => sdkSlideLayoutPart.SlideMasterPart!.SlideMaster,
-                _ => ((SlideMasterPart)this.sdkTypedOpenXmlPart).SlideMaster
+                _ => ((SlideMasterPart)this.sdkOpenXmlPart).SlideMaster
             };
             var aSolidFill = this.aText.Parent!.GetFirstChild<A.RunProperties>()?.SDKASolidFill();
             if (aSolidFill != null)
@@ -111,7 +111,7 @@ internal sealed class FontColor : IFontColor
 
             // From Shape
             var pShape = this.aText.Ancestors<P.Shape>().First();
-            var sdkSlidePShapeWrap = new ShapeColor(new PresentationColor(this.sdkTypedOpenXmlPart), pShape);
+            var sdkSlidePShapeWrap = new ShapeColor(new PresentationColor(this.sdkOpenXmlPart), pShape);
             string? shapeFontColorHex = sdkSlidePShapeWrap.HexOrNull();
             if (shapeFontColorHex != null)
             {
@@ -119,9 +119,9 @@ internal sealed class FontColor : IFontColor
             }
 
             // From Referenced Shape
-            if (this.sdkTypedOpenXmlPart is not SlideMasterPart)
+            if (this.sdkOpenXmlPart is not SlideMasterPart)
             {
-                var refShapeFontColorHex = new ReferencedIndent(this.sdkTypedOpenXmlPart, this.aText).ColorHexOrNull();
+                var refShapeFontColorHex = new ReferencedIndent(this.sdkOpenXmlPart, this.aText).ColorHexOrNull();
                 if (refShapeFontColorHex != null)
                 {
                     return refShapeFontColorHex;
@@ -138,7 +138,7 @@ internal sealed class FontColor : IFontColor
             }
 
             // Presentation level
-            var presColor = new PresentationColor(this.sdkTypedOpenXmlPart);
+            var presColor = new PresentationColor(this.sdkOpenXmlPart);
             var presParaLevelFont = presColor.PresentationFontOrThemeFontOrNull(indentLevel);
             string colorHex;
             if (presParaLevelFont.HasValue)
@@ -191,7 +191,7 @@ internal sealed class FontColor : IFontColor
 
         if (indentFont.Value.ASchemeColor != null)
         {
-            var sdkSlidePartWrap = new PresentationColor(this.sdkTypedOpenXmlPart);
+            var sdkSlidePartWrap = new PresentationColor(this.sdkOpenXmlPart);
             colorHexVariant = sdkSlidePartWrap.ThemeColorHex(indentFont.Value.ASchemeColor.Val!);
             response = (ColorType.Theme, colorHexVariant);
             return true;

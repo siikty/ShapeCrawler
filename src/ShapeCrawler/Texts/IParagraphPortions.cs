@@ -50,12 +50,12 @@ public interface IParagraphPortions : IEnumerable<IParagraphPortion>
 
 internal sealed class ParagraphPortions : IParagraphPortions
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.Paragraph aParagraph;
 
-    internal ParagraphPortions(TypedOpenXmlPart sdkTypedOpenXmlPart, A.Paragraph aParagraph)
+    internal ParagraphPortions(OpenXmlPart sdkOpenXmlPart, A.Paragraph aParagraph)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aParagraph = aParagraph;
     }
 
@@ -135,12 +135,12 @@ internal sealed class ParagraphPortions : IParagraphPortions
             switch (aParagraphElement)
             {
                 case A.Run aRun:
-                    var runPortion = new TextParagraphPortion(this.sdkTypedOpenXmlPart, aRun);
+                    var runPortion = new TextParagraphPortion(this.sdkOpenXmlPart, aRun);
                     portions.Add(runPortion);
                     break;
                 case A.Field aField:
                 {
-                    var fieldPortion = new Field(this.sdkTypedOpenXmlPart, aField);
+                    var fieldPortion = new Field(this.sdkOpenXmlPart, aField);
                     portions.Add(fieldPortion);
                     break;
                 }

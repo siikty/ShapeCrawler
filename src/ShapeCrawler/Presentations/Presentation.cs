@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
+using DocumentFormat.OpenXml.Packaging;
 using ShapeCrawler.Shared;
 
 namespace ShapeCrawler;
@@ -68,6 +69,8 @@ public sealed class Presentation : IPresentation
     ///     Gets a presentation byte array.
     /// </summary>
     public byte[] AsByteArray() => this.validateable.AsByteArray();
+ 
+    public PresentationDocument Document => this.validateable.Document;
 
     /// <inheritdoc />
     public void SaveAs(string path)

@@ -14,12 +14,12 @@ internal sealed class ChartGraphicFrameHandler
 {
     private const string Uri = "http://schemas.openxmlformats.org/drawingml/2006/chart";
 
-    public P.GraphicFrame Create(TypedOpenXmlPart typedOpenXmlPart)
+    public P.GraphicFrame Create(OpenXmlPart OpenXmlPart)
     {
         var id = (UInt32Value)6U;
         var name = "Chart X";
 
-        var chartPart = typedOpenXmlPart.AddNewPart<ChartPart>("rId2");
+        var chartPart = OpenXmlPart.AddNewPart<ChartPart>("rId2");
         this.GenerateChartPartContent(chartPart);
 
         // Create Excel

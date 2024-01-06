@@ -5,12 +5,12 @@ using A = DocumentFormat.OpenXml.Drawing;
 
 internal sealed class ATextWrap
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.Text aText;
 
-    internal ATextWrap(TypedOpenXmlPart sdkTypedOpenXmlPart, A.Text aText)
+    internal ATextWrap(OpenXmlPart sdkOpenXmlPart, A.Text aText)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aText = aText;
     }
 
@@ -21,14 +21,14 @@ internal sealed class ATextWrap
         {
             if (aEastAsianFont.Typeface == "+mj-ea")
             {
-                var themeFontScheme = new ThemeFontScheme(this.sdkTypedOpenXmlPart);
+                var themeFontScheme = new ThemeFontScheme(this.sdkOpenXmlPart);
                 return themeFontScheme.MajorEastAsianFont();
             }
 
             return aEastAsianFont.Typeface!;
         }
         
-        return new ThemeFontScheme(this.sdkTypedOpenXmlPart).MinorEastAsianFont();
+        return new ThemeFontScheme(this.sdkOpenXmlPart).MinorEastAsianFont();
     }
 
     internal void UpdateEastAsianName(string eastAsianFont)
@@ -40,6 +40,6 @@ internal sealed class ATextWrap
             return;
         }
         
-        new ThemeFontScheme(this.sdkTypedOpenXmlPart).UpdateMinorEastAsianFont(eastAsianFont);
+        new ThemeFontScheme(this.sdkOpenXmlPart).UpdateMinorEastAsianFont(eastAsianFont);
     }
 }

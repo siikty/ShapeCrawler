@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using DocumentFormat.OpenXml.Packaging;
+using System.IO;
 
 namespace ShapeCrawler;
 
@@ -41,4 +42,6 @@ internal sealed record PathPresentation : IValidateable
     public byte[] AsByteArray() => this.presentationCore.AsByteArray();
     public ISections Sections => this.presentationCore.Sections;
     public IFooter Footer => this.presentationCore.Footer;
+
+    public PresentationDocument Document => this.presentationCore.Document;
 }

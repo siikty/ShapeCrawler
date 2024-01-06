@@ -30,11 +30,11 @@ internal sealed class Chart : Shape, IChart
     private string? chartTitle;
 
     internal Chart(
-        TypedOpenXmlPart sdkTypedOpenXmlPart, 
+        OpenXmlPart sdkOpenXmlPart, 
         ChartPart sdkChartPart, 
         P.GraphicFrame pGraphicFrame,
         IReadOnlyList<ICategory> categories)
-        : base(sdkTypedOpenXmlPart,pGraphicFrame)
+        : base(sdkOpenXmlPart,pGraphicFrame)
     {
         this.sdkChartPart = sdkChartPart;
         this.pGraphicFrame = pGraphicFrame;
@@ -43,8 +43,8 @@ internal sealed class Chart : Shape, IChart
         this.cPlotArea = sdkChartPart.ChartSpace.GetFirstChild<C.Chart>() !.PlotArea!;
         this.cXCharts = this.cPlotArea.Where(e => e.LocalName.EndsWith("Chart", StringComparison.Ordinal));
         var pShapeProperties = sdkChartPart.ChartSpace.GetFirstChild<C.ShapeProperties>() !;
-        this.Outline = new SlideShapeOutline(sdkTypedOpenXmlPart, pShapeProperties);
-        this.Fill = new ShapeFill(sdkTypedOpenXmlPart, pShapeProperties);
+        this.Outline = new SlideShapeOutline(sdkOpenXmlPart, pShapeProperties);
+        this.Fill = new ShapeFill(sdkOpenXmlPart, pShapeProperties);
         this.SeriesList = new SeriesList(
             sdkChartPart,
             this.cPlotArea.Where(e => e.LocalName.EndsWith("Chart", StringComparison.Ordinal)));
@@ -204,5 +204,10 @@ internal sealed class Chart : Shape, IChart
     {
         return this.cXCharts.First().ChildElements
             .FirstOrDefault(e => e.LocalName.Equals("ser", StringComparison.Ordinal));
+    }
+
+    public ChartPart GetChartPart()
+    {
+        return this.sdkChartPart;
     }
 }

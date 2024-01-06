@@ -8,12 +8,12 @@ namespace ShapeCrawler.ShapeCollection;
 
 internal sealed class ShapeSize
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly OpenXmlElement sdkPShapeTreeElement;
 
-    internal ShapeSize(TypedOpenXmlPart sdkTypedOpenXmlPart, OpenXmlElement sdkPShapeTreeElement)
+    internal ShapeSize(OpenXmlPart sdkOpenXmlPart, OpenXmlElement sdkPShapeTreeElement)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.sdkPShapeTreeElement = sdkPShapeTreeElement;
     }
 
@@ -33,6 +33,6 @@ internal sealed class ShapeSize
             return aExtents;
         }
 
-        return new ReferencedPShape(this.sdkTypedOpenXmlPart, this.sdkPShapeTreeElement).ATransform2D().Extents!;
+        return new ReferencedPShape(this.sdkOpenXmlPart, this.sdkPShapeTreeElement).ATransform2D().Extents!;
     }
 }

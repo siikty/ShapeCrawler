@@ -10,7 +10,7 @@ namespace ShapeCrawler.Fonts;
 
 internal sealed class TextPortionFont : ITextPortionFont
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.Text aText;
     private readonly Lazy<FontColor> fontColor;
     private readonly IFontSize size;
@@ -18,29 +18,29 @@ internal sealed class TextPortionFont : ITextPortionFont
     private readonly ATextWrap sdkATextWrap;
 
     internal TextPortionFont(
-        TypedOpenXmlPart sdkTypedOpenXmlPart,
+        OpenXmlPart sdkOpenXmlPart,
         A.Text aText,
         IFontSize size)
         : this(
-            sdkTypedOpenXmlPart,
+            sdkOpenXmlPart,
             aText,
             size,
-            new ThemeFontScheme(sdkTypedOpenXmlPart))
+            new ThemeFontScheme(sdkOpenXmlPart))
     {
     }
 
     private TextPortionFont(
-        TypedOpenXmlPart sdkTypedOpenXmlPart,
+        OpenXmlPart sdkOpenXmlPart,
         A.Text aText,
         IFontSize size,
         ThemeFontScheme themeFontScheme)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.aText = aText;
-        this.fontColor = new Lazy<FontColor>(() => new FontColor(sdkTypedOpenXmlPart, this.aText));
+        this.fontColor = new Lazy<FontColor>(() => new FontColor(sdkOpenXmlPart, this.aText));
         this.size = size;
         this.themeFontScheme = themeFontScheme;
-        this.sdkATextWrap = new ATextWrap(sdkTypedOpenXmlPart, aText);
+        this.sdkATextWrap = new ATextWrap(sdkOpenXmlPart, aText);
     }
 
     #region Public APIs
@@ -200,13 +200,13 @@ internal sealed class TextPortionFont : ITextPortionFont
             return aLatinFont;
         }
 
-        aLatinFont = new ReferencedIndent(this.sdkTypedOpenXmlPart, this.aText).ALatinFontOrNull();
+        aLatinFont = new ReferencedIndent(this.sdkOpenXmlPart, this.aText).ALatinFontOrNull();
         if (aLatinFont != null)
         {
             return aLatinFont;
         }
 
-        return new ThemeFontScheme(this.sdkTypedOpenXmlPart).MinorLatinFont();
+        return new ThemeFontScheme(this.sdkOpenXmlPart).MinorLatinFont();
     }
 
     private bool ParseBoldFlag()
@@ -222,7 +222,7 @@ internal sealed class TextPortionFont : ITextPortionFont
             return true;
         }
 
-        bool? isFontBold = new ReferencedIndent(this.sdkTypedOpenXmlPart, this.aText).FontBoldFlagOrNull();
+        bool? isFontBold = new ReferencedIndent(this.sdkOpenXmlPart, this.aText).FontBoldFlagOrNull();
         if (isFontBold.HasValue)
         {
             return isFontBold.Value;

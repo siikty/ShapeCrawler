@@ -34,15 +34,15 @@ internal sealed class ThemeFontScheme : IThemeFontScheme
 {
     private readonly A.FontScheme aFontScheme;
 
-    internal ThemeFontScheme(TypedOpenXmlPart sdkTypedOpenXmlPart)
+    internal ThemeFontScheme(OpenXmlPart sdkOpenXmlPart)
     {
-        this.aFontScheme = sdkTypedOpenXmlPart switch
+        this.aFontScheme = sdkOpenXmlPart switch
         {
             SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.ThemePart!.Theme.ThemeElements!
                 .FontScheme!,
             SlideLayoutPart sdkSlideLayoutPart => sdkSlideLayoutPart.SlideMasterPart!.ThemePart!.Theme.ThemeElements!
                 .FontScheme!,
-            _ => ((SlideMasterPart)sdkTypedOpenXmlPart).ThemePart!.Theme.ThemeElements!.FontScheme!
+            _ => ((SlideMasterPart)sdkOpenXmlPart).ThemePart!.Theme.ThemeElements!.FontScheme!
         };
     }
 

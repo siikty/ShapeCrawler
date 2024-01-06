@@ -30,12 +30,12 @@ internal class MediaShape : Shape, IMediaShape
 {
     private readonly P.Picture pPicture;
 
-    internal MediaShape(TypedOpenXmlPart sdkTypedOpenXmlPart, P.Picture pPicture)
-        : base(sdkTypedOpenXmlPart, pPicture)
+    internal MediaShape(OpenXmlPart sdkOpenXmlPart, P.Picture pPicture)
+        : base(sdkOpenXmlPart, pPicture)
     {
         this.pPicture = pPicture;
-        this.Outline = new SlideShapeOutline(sdkTypedOpenXmlPart, pPicture.ShapeProperties!);
-        this.Fill = new ShapeFill(sdkTypedOpenXmlPart, pPicture.ShapeProperties!);
+        this.Outline = new SlideShapeOutline(sdkOpenXmlPart, pPicture.ShapeProperties!);
+        this.Fill = new ShapeFill(sdkOpenXmlPart, pPicture.ShapeProperties!);
     }
 
     public override ShapeType ShapeType => ShapeType.Video;
@@ -57,7 +57,7 @@ internal class MediaShape : Shape, IMediaShape
             var p14Media = this.pPicture.NonVisualPictureProperties!.ApplicationNonVisualDrawingProperties!
                 .Descendants<DocumentFormat.OpenXml.Office2010.PowerPoint.Media>().Single();
             var relationship =
-                this.sdkTypedOpenXmlPart.DataPartReferenceRelationships.First(r => r.Id == p14Media.Embed!.Value);
+                this.sdkOpenXmlPart.DataPartReferenceRelationships.First(r => r.Id == p14Media.Embed!.Value);
 
             return relationship.DataPart.ContentType;
         }
@@ -67,7 +67,7 @@ internal class MediaShape : Shape, IMediaShape
     {
         var p14Media = this.pPicture.NonVisualPictureProperties!.ApplicationNonVisualDrawingProperties!
             .Descendants<DocumentFormat.OpenXml.Office2010.PowerPoint.Media>().Single();
-        var relationship = this.sdkTypedOpenXmlPart.DataPartReferenceRelationships.First(r => r.Id == p14Media.Embed!.Value);
+        var relationship = this.sdkOpenXmlPart.DataPartReferenceRelationships.First(r => r.Id == p14Media.Embed!.Value);
         var stream = relationship.DataPart.GetStream();
         var ms = new MemoryStream();
         stream.CopyTo(ms);

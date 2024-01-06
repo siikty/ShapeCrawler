@@ -9,12 +9,12 @@ namespace ShapeCrawler.Positions;
 
 internal sealed class Position
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly OpenXmlElement pShapeTreeElement;
 
-    internal Position(TypedOpenXmlPart sdkTypedOpenXmlPart, OpenXmlElement pShapeTreeElement)
+    internal Position(OpenXmlPart sdkOpenXmlPart, OpenXmlElement pShapeTreeElement)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.pShapeTreeElement = pShapeTreeElement;
     }
 
@@ -42,6 +42,6 @@ internal sealed class Position
             return aOffset;
         }
 
-        return new ReferencedPShape(this.sdkTypedOpenXmlPart, this.pShapeTreeElement).ATransform2D().Offset!;
+        return new ReferencedPShape(this.sdkOpenXmlPart, this.pShapeTreeElement).ATransform2D().Offset!;
     }  
 }

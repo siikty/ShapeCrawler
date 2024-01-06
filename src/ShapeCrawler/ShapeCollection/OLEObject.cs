@@ -11,12 +11,12 @@ internal class OLEObject : ShapeCollection.Shape
 {
     private readonly P.GraphicFrame pGraphicFrame;
 
-    internal OLEObject(TypedOpenXmlPart sdkTypedOpenXmlPart, P.GraphicFrame pGraphicFrame)
-        : base(sdkTypedOpenXmlPart, pGraphicFrame)
+    internal OLEObject(OpenXmlPart sdkOpenXmlPart, P.GraphicFrame pGraphicFrame)
+        : base(sdkOpenXmlPart, pGraphicFrame)
     {
         this.pGraphicFrame = pGraphicFrame;
-        this.Outline = new SlideShapeOutline(sdkTypedOpenXmlPart, pGraphicFrame.Descendants<P.ShapeProperties>().First());
-        this.Fill = new ShapeFill(sdkTypedOpenXmlPart, pGraphicFrame.Descendants<P.ShapeProperties>().First());
+        this.Outline = new SlideShapeOutline(sdkOpenXmlPart, pGraphicFrame.Descendants<P.ShapeProperties>().First());
+        this.Fill = new ShapeFill(sdkOpenXmlPart, pGraphicFrame.Descendants<P.ShapeProperties>().First());
     }
 
     public override ShapeType ShapeType => ShapeType.OLEObject;

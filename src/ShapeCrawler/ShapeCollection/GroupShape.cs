@@ -12,13 +12,13 @@ internal sealed class GroupShape : Shape, IGroupShape
 {
     private readonly P.GroupShape pGroupShape;
 
-    internal GroupShape(TypedOpenXmlPart sdkTypedOpenXmlPart, P.GroupShape pGroupShape)
-        : base(sdkTypedOpenXmlPart, pGroupShape)
+    internal GroupShape(OpenXmlPart sdkOpenXmlPart, P.GroupShape pGroupShape)
+        : base(sdkOpenXmlPart, pGroupShape)
     {
         this.pGroupShape = pGroupShape;
-        this.Shapes = new GroupedShapes(sdkTypedOpenXmlPart, pGroupShape.Elements<OpenXmlCompositeElement>());
-        this.Outline = new SlideShapeOutline(sdkTypedOpenXmlPart, pGroupShape.Descendants<P.ShapeProperties>().First());
-        this.Fill = new ShapeFill(sdkTypedOpenXmlPart, pGroupShape.Descendants<P.ShapeProperties>().First());
+        this.Shapes = new GroupedShapes(sdkOpenXmlPart, pGroupShape.Elements<OpenXmlCompositeElement>());
+        this.Outline = new SlideShapeOutline(sdkOpenXmlPart, pGroupShape.Descendants<P.ShapeProperties>().First());
+        this.Fill = new ShapeFill(sdkOpenXmlPart, pGroupShape.Descendants<P.ShapeProperties>().First());
     }
 
     public IShapes Shapes { get; }

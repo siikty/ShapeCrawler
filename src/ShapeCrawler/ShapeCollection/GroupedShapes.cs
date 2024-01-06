@@ -11,14 +11,14 @@ namespace ShapeCrawler.ShapeCollection;
 
 internal sealed class GroupedShapes : IShapes
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly IEnumerable<OpenXmlCompositeElement> pGroupElements;
 
     internal GroupedShapes(
-        TypedOpenXmlPart sdkTypedOpenXmlPart,
+        OpenXmlPart sdkOpenXmlPart,
         IEnumerable<OpenXmlCompositeElement> pGroupElements)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.pGroupElements = pGroupElements;
     }
     
@@ -46,26 +46,26 @@ internal sealed class GroupedShapes : IShapes
             IShape? shape = null;
             if (pGroupShapeElement is P.GroupShape pGroupShape)
             {
-                shape = new GroupShape(this.sdkTypedOpenXmlPart, pGroupShape);
+                shape = new GroupShape(this.sdkOpenXmlPart, pGroupShape);
             }
             else if (pGroupShapeElement is P.Shape pShape)
             {
                 if (pShape.TextBody is not null)
                 {
                     shape = new GroupedShape(
-                        this.sdkTypedOpenXmlPart,
+                        this.sdkOpenXmlPart,
                         pShape,
                         new AutoShape(
-                            this.sdkTypedOpenXmlPart, 
+                            this.sdkOpenXmlPart, 
                             pShape,
-                            new TextFrame(this.sdkTypedOpenXmlPart, pShape.TextBody)));
+                            new TextFrame(this.sdkOpenXmlPart, pShape.TextBody)));
                 }
                 else
                 {
                     shape = new GroupedShape(
-                        this.sdkTypedOpenXmlPart,
+                        this.sdkOpenXmlPart,
                         pShape,
-                        new AutoShape(this.sdkTypedOpenXmlPart, pShape));
+                        new AutoShape(this.sdkOpenXmlPart, pShape));
                 }
             }
             else if (pGroupShapeElement is P.Picture pPicture)
@@ -74,7 +74,7 @@ internal sealed class GroupedShapes : IShapes
                 var blipEmbed = aBlip?.Embed;
                 if (blipEmbed is not null)
                 {
-                    shape = new Picture(this.sdkTypedOpenXmlPart, pPicture, aBlip!);
+                    shape = new Picture(this.sdkOpenXmlPart, pPicture, aBlip!);
                 }
             }
 

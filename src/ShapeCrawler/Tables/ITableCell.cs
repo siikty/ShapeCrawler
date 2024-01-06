@@ -29,14 +29,14 @@ public interface ITableCell
 
 internal sealed class TableCell : ITableCell
 {
-    internal TableCell(TypedOpenXmlPart sdkTypedOpenXmlPart, A.TableCell aTableCell, int rowIndex, int columnIndex)
+    internal TableCell(OpenXmlPart sdkOpenXmlPart, A.TableCell aTableCell, int rowIndex, int columnIndex)
     {
         this.ATableCell = aTableCell;
         this.RowIndex = rowIndex;
         this.ColumnIndex = columnIndex;
-        this.TextFrame = new TextFrame(sdkTypedOpenXmlPart, this.ATableCell.TextBody!);
+        this.TextFrame = new TextFrame(sdkOpenXmlPart, this.ATableCell.TextBody!);
         var aTcPr = aTableCell.TableCellProperties!;
-        this.Fill = new TableCellFill(sdkTypedOpenXmlPart, aTcPr);
+        this.Fill = new TableCellFill(sdkOpenXmlPart, aTcPr);
     }
 
     public bool IsMergedCell => this.ATableCell.GridSpan is not null ||

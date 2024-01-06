@@ -7,7 +7,7 @@ namespace ShapeCrawler.Drawing;
 
 internal class TableCellFill : IShapeFill
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly A.TableCellProperties sdkATableCellProperties;
     private FillType fillType;
     private bool isDirty;
@@ -18,9 +18,9 @@ internal class TableCellFill : IShapeFill
     private A.PatternFill? sdkAPattFill;
     private A.BlipFill? sdkABlipFill;
 
-    internal TableCellFill(TypedOpenXmlPart sdkTypedOpenXmlPart, A.TableCellProperties sdkATableCellProperties)
+    internal TableCellFill(OpenXmlPart sdkOpenXmlPart, A.TableCellProperties sdkATableCellProperties)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.sdkATableCellProperties = sdkATableCellProperties;
         this.isDirty = true;
     }
@@ -50,7 +50,7 @@ internal class TableCellFill : IShapeFill
         }
         else
         {
-            var rId = this.sdkTypedOpenXmlPart.AddImagePart(image);
+            var rId = this.sdkOpenXmlPart.AddImagePart(image);
 
             var aBlipFill = new A.BlipFill();
             var aStretch = new A.Stretch();
@@ -151,8 +151,8 @@ internal class TableCellFill : IShapeFill
             var blipEmbedValue = this.sdkABlipFill.Blip?.Embed?.Value;
             if (blipEmbedValue != null)
             {
-                var imagePart = (ImagePart)this.sdkTypedOpenXmlPart.GetPartById(blipEmbedValue);
-                var image = new ShapeFillImage(this.sdkTypedOpenXmlPart, this.sdkABlipFill, imagePart);
+                var imagePart = (ImagePart)this.sdkOpenXmlPart.GetPartById(blipEmbedValue);
+                var image = new ShapeFillImage(this.sdkOpenXmlPart, this.sdkABlipFill, imagePart);
                 this.pictureImage = image;
                 this.fillType = FillType.Picture;
             }

@@ -21,12 +21,12 @@ public interface IParagraphs : IReadOnlyList<IParagraph>
 
 internal readonly struct Paragraphs : IParagraphs
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
+    private readonly OpenXmlPart sdkOpenXmlPart;
     private readonly OpenXmlElement sdkTextBody;
 
-    internal Paragraphs(TypedOpenXmlPart sdkTypedOpenXmlPart, OpenXmlElement sdkTextBody)
+    internal Paragraphs(OpenXmlPart sdkOpenXmlPart, OpenXmlElement sdkTextBody)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
         this.sdkTextBody = sdkTextBody;
     }
 
@@ -61,7 +61,7 @@ internal readonly struct Paragraphs : IParagraphs
         var paraList = new List<Paragraph>();
         foreach (var aPara in aParagraphs)
         {
-            var para = new Paragraph(this.sdkTypedOpenXmlPart, aPara);
+            var para = new Paragraph(this.sdkOpenXmlPart, aPara);
             paraList.Add(para);
         }
 

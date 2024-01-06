@@ -120,4 +120,12 @@ internal sealed class PresentationCore
             throw new SCException("Presentation is invalid. See the Errors property for details.");
         }
     }
+
+    public PresentationDocument Document
+    {
+        get
+        {
+            return this.sdkPresDocument;
+        }
+    }
 }

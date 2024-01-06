@@ -9,13 +9,13 @@ namespace ShapeCrawler.ShapeCollection;
 
 internal sealed class SlideShapeOutline : IShapeOutline
 {
-    private readonly TypedOpenXmlPart sdkTypedOpenXmlPart;
-    private readonly TypedOpenXmlCompositeElement sdkTypedOpenXmlCompositeElement;
+    private readonly OpenXmlPart sdkOpenXmlPart;
+    private readonly OpenXmlCompositeElement sdkOpenXmlCompositeElement;
 
-    internal SlideShapeOutline(TypedOpenXmlPart sdkTypedOpenXmlPart, TypedOpenXmlCompositeElement sdkTypedOpenXmlCompositeElement)
+    internal SlideShapeOutline(OpenXmlPart sdkOpenXmlPart, OpenXmlCompositeElement sdkOpenXmlCompositeElement)
     {
-        this.sdkTypedOpenXmlPart = sdkTypedOpenXmlPart;
-        this.sdkTypedOpenXmlCompositeElement = sdkTypedOpenXmlCompositeElement;
+        this.sdkOpenXmlPart = sdkOpenXmlPart;
+        this.sdkOpenXmlCompositeElement = sdkOpenXmlCompositeElement;
     }
 
     public double Weight
@@ -32,12 +32,12 @@ internal sealed class SlideShapeOutline : IShapeOutline
 
     private void UpdateWeight(double points)
     {
-        var aOutline = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.Outline>();
+        var aOutline = this.sdkOpenXmlCompositeElement.GetFirstChild<A.Outline>();
         var aNoFill = aOutline?.GetFirstChild<A.NoFill>();
 
         if (aOutline == null || aNoFill != null)
         {
-            aOutline = this.sdkTypedOpenXmlCompositeElement.AddAOutline();
+            aOutline = this.sdkOpenXmlCompositeElement.AddAOutline();
         }
 
         aOutline.Width = new Int32Value(UnitConverter.PointToEmu(points));
@@ -45,12 +45,12 @@ internal sealed class SlideShapeOutline : IShapeOutline
     
     private void UpdateHexColor(string? hex)
     {
-        var aOutline = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.Outline>();
+        var aOutline = this.sdkOpenXmlCompositeElement.GetFirstChild<A.Outline>();
         var aNoFill = aOutline?.GetFirstChild<A.NoFill>();
 
         if (aOutline == null || aNoFill != null)
         {
-            aOutline = this.sdkTypedOpenXmlCompositeElement.AddAOutline();
+            aOutline = this.sdkOpenXmlCompositeElement.AddAOutline();
         }
 
         var aSolidFill = aOutline.GetFirstChild<A.SolidFill>();
@@ -64,7 +64,7 @@ internal sealed class SlideShapeOutline : IShapeOutline
 
     private double ParseWeight()
     {
-        var width = this.sdkTypedOpenXmlCompositeElement.GetFirstChild<A.Outline>()?.Width;
+        var width = this.sdkOpenXmlCompositeElement.GetFirstChild<A.Outline>()?.Width;
         if (width is null)
         {
             return 0;
@@ -77,7 +77,7 @@ internal sealed class SlideShapeOutline : IShapeOutline
 
     private string? ParseHexColor()
     {
-        var aSolidFill = this.sdkTypedOpenXmlCompositeElement
+        var aSolidFill = this.sdkOpenXmlCompositeElement
             .GetFirstChild<A.Outline>()?
             .GetFirstChild<A.SolidFill>();
         if (aSolidFill is null)
@@ -86,11 +86,11 @@ internal sealed class SlideShapeOutline : IShapeOutline
             return defaultBlackHex;
         }
 
-        var pSlideMaster = this.sdkTypedOpenXmlPart switch
+        var pSlideMaster = this.sdkOpenXmlPart switch
         {
             SlidePart sdkSlidePart => sdkSlidePart.SlideLayoutPart!.SlideMasterPart!.SlideMaster,
             SlideLayoutPart sdkSlideLayoutPart => sdkSlideLayoutPart.SlideMasterPart!.SlideMaster,
-            _ => ((SlideMasterPart)this.sdkTypedOpenXmlPart).SlideMaster
+            _ => ((SlideMasterPart)this.sdkOpenXmlPart).SlideMaster
         };
         var typeAndHex = HexParser.FromSolidFill(aSolidFill, pSlideMaster);
         
